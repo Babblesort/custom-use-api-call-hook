@@ -6,11 +6,17 @@ import analysesReducer from '../features/analyses/analyses-slice';
 import hypothesesReducer from '../features/hypotheses/hypotheses-slice';
 import projectReducer from '../features/project/project-slice';
 
-const rootReducer = combineReducers({
-  project: projectReducer,
+const collectionsReducer = combineReducers({
   insights: insightsReducer,
   analyses: analysesReducer,
   hypotheses: hypothesesReducer
+});
+
+const rootReducer = combineReducers({
+  project: combineReducers({
+    details: projectReducer,
+    collections: collectionsReducer
+  })
 });
 
 export const store = configureStore({

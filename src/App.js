@@ -15,16 +15,20 @@ import {
   removeHypothesis,
   updateHypothesis
 } from './features/hypotheses/hypotheses-slice';
+import { setProject } from './features/project/project-slice';
 
 const App = () => {
   const dispatch = useDispatch();
-  const insights = useSelector(state => state.insights);
-  const analyses = useSelector(state => state.analyses);
-  const hypotheses = useSelector(state => state.hypotheses);
+  const insights = useSelector(state => state.project.collections.insights);
+  const analyses = useSelector(state => state.project.collections.analyses);
+  const hypotheses = useSelector(state => state.project.collections.hypotheses);
 
   const [insightText, setInsightText] = useState('');
   const [analysisText, setAnalysisText] = useState('');
   const [hypothesisText, setHypothesisText] = useState('');
+
+  const handleSetProject = () =>
+    dispatch(setProject({ id: '1', name: 'My Project' }));
 
   const handleInsightTextChange = e => setInsightText(e.target.value);
   const handleAddInsight = () => {
@@ -64,6 +68,9 @@ const App = () => {
 
   return (
     <div>
+      <div>
+        <button onClick={handleSetProject}>Set Project</button>
+      </div>
       <div>
         <button onClick={handleAddInsight}>Add Insight</button>
         <input onChange={handleInsightTextChange} value={insightText} />
