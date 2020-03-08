@@ -58,7 +58,7 @@ const App = () => {
   // and returns the fetched data.
 
   // Data is fetched on first mount of the component.
-  // Refetch can be triggered by updating the refetchInsightsTrigger value
+  // Refetch can be triggered by updating the refetchOptionsTrigger value
   const [refetchOptionsTrigger, setRefetchOptionsTrigger] = useState(1);
   const {
     isProcessing: optionsAreLoading,
