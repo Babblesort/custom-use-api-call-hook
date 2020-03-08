@@ -1,0 +1,58 @@
+{
+  "hypotheses": {
+    "byId": {
+      "h1": {
+        "id": "h1",
+        "title": "Hypo title",
+        "description": "Hypo description",
+        "conclusion": "Hypo conclusion",
+        "impact": 0,
+        "status": 0
+      },
+      "h2": {
+        "id": "h2",
+        "title": "Hypo title 2",
+        "description": "Hypo description 2",
+        "conclusion": "Hypo conclusion 2",
+        "impact": 100,
+        "status": 100
+      }
+    },
+    "allIds": [
+      "h1",
+      "h2"
+    ]
+  },
+  "insights": {
+    "byId": {
+      "i1": {
+        "id": "i1",
+        "title": "Insight One"
+      },
+      "i2": {
+        "id": "i2",
+        "title": "Insight Two"
+      }
+    },
+    "allIds": [
+      "i1",
+      "i2"
+    ]
+  },
+  "analyses": {
+    "byId": {
+      "a1": {
+        "id": "a1",
+        "title": "Analysis One"
+      },
+      "a2": {
+        "id": "a2",
+        "title": "Analysis Two"
+      }
+    },
+    "allIds": [
+      "a1",
+      "a2"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "projects": [
+    {
+      "id": "proj1",
+      "name": "Project 1",
+      "hypotheses": [
+        {
+          "id": "hypo1",
+          "title": "Hypo title",
+          "description": "Hypo description",
+          "conclusion": "Hypo conclusion",
+          "impact": 0,
+          "status": 0
+        },
+        {
+          "id": "hypo2",
+          "title": "Hypo title 2",
+          "description": "Hypo description 2",
+          "conclusion": "Hypo conclusion 2",
+          "impact": 100,
+          "status": 100
+        }
+      ]
+    },
+    {
+      "id": "proj2",
+      "name": "Project 2",
+      "hypotheses": [
+        {
+          "id": "hypo1",
+          "title": "Hypo title",
+          "description": "Hypo description",
+          "conclusion": "Hypo conclusion",
+          "impact": 0,
+          "status": 0
+        },
+        {
+          "id": "hypo2",
+          "title": "Hypo title 2",
+          "description": "Hypo description 2",
+          "conclusion": "Hypo conclusion 2",
+          "impact": 100,
+          "status": 100
+        }
+      ]
+    }
+  ]
+}
