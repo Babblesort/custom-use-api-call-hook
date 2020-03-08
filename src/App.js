@@ -30,7 +30,7 @@ const App = () => {
 
   // When the fetch fails the hook will call the onErrorActionCreator (if passed in)
   // with the fetch error as payload and dispath the result.
-  const [refetchInsightsTrigger, setRefetchInsightsTrigger] = useState(1);
+  const [insightsTrigger, setInsightsTrigger] = useState(1);
   const {
     isProcessing: insightsAreLoading,
     hasError: insightsHasError
@@ -38,18 +38,12 @@ const App = () => {
     getInsights,
     setInsights,
     undefined,
-    refetchInsightsTrigger
+    insightsTrigger
   );
 
-  const handleRefetchInsights = () =>
-    setRefetchInsightsTrigger(refetchInsightsTrigger + 1);
-
-  const handleRemoveInsight = id => {
-    dispatch(removeInsight(id));
-  };
-  const handleUpdateInsight = insight => {
-    dispatch(updateInsight(insight));
-  };
+  const handleRefetchInsights = () => setInsightsTrigger(insightsTrigger + 1);
+  const handleRemoveInsight = id => dispatch(removeInsight(id));
+  const handleUpdateInsight = insight => dispatch(updateInsight(insight));
 
   // useApiServiceCallLocal custom hook
 
@@ -59,15 +53,14 @@ const App = () => {
 
   // Data is fetched on first mount of the component.
   // Refetch can be triggered by updating the refetchOptionsTrigger value
-  const [refetchOptionsTrigger, setRefetchOptionsTrigger] = useState(1);
+  const [optionsTrigger, setOptionsTrigger] = useState(1);
   const {
     isProcessing: optionsAreLoading,
     hasError: optionsHasError,
     data: options
-  } = useApiServiceCallLocal(getOptions, [], refetchOptionsTrigger);
+  } = useApiServiceCallLocal(getOptions, [], optionsTrigger);
 
-  const handleRefetchOptions = () =>
-    setRefetchOptionsTrigger(refetchOptionsTrigger + 1);
+  const handleRefetchOptions = () => setOptionsTrigger(optionsTrigger + 1);
 
   return (
     <div
