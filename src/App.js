@@ -6,17 +6,17 @@ import {
   updateInsight
 } from './features/insights/insights-slice';
 import { getInsights, getOptions } from './services/data-service';
-import useApiServiceFetchRedux from './redux/use-api-service-fetch-redux';
-import useApiServiceFetchLocal from './redux/use-api-service-fetch-local';
+import useApiServiceCallRedux from './redux/use-api-service-call-redux';
+import useApiServiceCallLocal from './redux/use-api-service-call-local';
 
 const App = () => {
   const dispatch = useDispatch();
   const insights = useSelector(state => state.insights);
 
-  // useApiServiceFetchRedux custom hook
+  // useApiServiceCallRedux custom hook
 
   // insights are stored in global redux store
-  // useApiServiceFetchRedux allows generic loading and error states
+  // useApiServiceCallRedux allows generic loading and error states
   // while still dispatching to the global store for data changes
 
   // Data is fetched on first mount of the component.
@@ -32,9 +32,9 @@ const App = () => {
   // with the fetch error as payload and dispath the result.
   const [refetchInsightsTrigger, setRefetchInsightsTrigger] = useState(1);
   const {
-    isLoading: insightsAreLoading,
+    isProcessing: insightsAreLoading,
     hasError: insightsHasError
-  } = useApiServiceFetchRedux(
+  } = useApiServiceCallRedux(
     getInsights,
     setInsights,
     undefined,
@@ -51,20 +51,20 @@ const App = () => {
     dispatch(updateInsight(insight));
   };
 
-  // useApiServiceFetchLocal custom hook
+  // useApiServiceCallLocal custom hook
 
   // options are fetched and made available to the host component.
-  // useApiServiceFetchLocal allows generic loading and error states
+  // useApiServiceCallLocal allows generic loading and error states
   // and returns the fetched data.
 
   // Data is fetched on first mount of the component.
   // Refetch can be triggered by updating the refetchInsightsTrigger value
   const [refetchOptionsTrigger, setRefetchOptionsTrigger] = useState(1);
   const {
-    isLoading: optionsAreLoading,
+    isProcessing: optionsAreLoading,
     hasError: optionsHasError,
     data: options
-  } = useApiServiceFetchLocal(getOptions, [], refetchOptionsTrigger);
+  } = useApiServiceCallLocal(getOptions, [], refetchOptionsTrigger);
 
   const handleRefetchOptions = () =>
     setRefetchOptionsTrigger(refetchOptionsTrigger + 1);
