@@ -1,40 +1,49 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  addInsight,
+  setInsights,
   removeInsight,
   updateInsight
 } from './features/insights/insights-slice';
-import {
-  addAnalysis,
-  removeAnalysis,
-  updateAnalysis
-} from './features/analyses/analyses-slice';
-import {
-  addHypothesis,
-  removeHypothesis,
-  updateHypothesis
-} from './features/hypotheses/hypotheses-slice';
-import { setProject } from './features/project/project-slice';
+import { getInsights, getOptions } from './services/data-service';
+import useApiServiceFetchRedux from './redux/use-api-service-fetch-redux';
+import useApiServiceFetchLocal from './redux/use-api-service-fetch-local';
 
 const App = () => {
   const dispatch = useDispatch();
-  const insights = useSelector(state => state.project.collections.insights);
-  const analyses = useSelector(state => state.project.collections.analyses);
-  const hypotheses = useSelector(state => state.project.collections.hypotheses);
+  const insights = useSelector(state => state.insights);
 
-  const [insightText, setInsightText] = useState('');
-  const [analysisText, setAnalysisText] = useState('');
-  const [hypothesisText, setHypothesisText] = useState('');
+  // useApiServiceFetchRedux custom hook
 
-  const handleSetProject = () =>
-    dispatch(setProject({ id: '1', name: 'My Project' }));
+  // insights are stored in global redux store
+  // useApiServiceFetchRedux allows generic loading and error states
+  // while still dispatching to the global store for data changes
 
-  const handleInsightTextChange = e => setInsightText(e.target.value);
-  const handleAddInsight = () => {
-    dispatch(addInsight({ id: insightText, name: 'name' }));
-    setInsightText('');
-  };
+  // Data is fetched on first mount of the component.
+  // Refetch can be triggered by updating the refetchInsightsTrigger value
+
+  // setInsights and undefined are passed as onSuccessActionCreator and
+  // onErrorActionCreator.
+
+  // When the fetch succeeds the hook will call the onSuccessActionCreator (if passed in)
+  // with the fetch result as payload and dispatch the result.
+
+  // When the fetch fails the hook will call the onErrorActionCreator (if passed in)
+  // with the fetch error as payload and dispath the result.
+  const [refetchInsightsTrigger, setRefetchInsightsTrigger] = useState(1);
+  const {
+    isLoading: insightsAreLoading,
+    hasError: insightsHasError
+  } = useApiServiceFetchRedux(
+    getInsights,
+    setInsights,
+    undefined,
+    refetchInsightsTrigger
+  );
+
+  const handleRefetchInsights = () =>
+    setRefetchInsightsTrigger(refetchInsightsTrigger + 1);
+
   const handleRemoveInsight = id => {
     dispatch(removeInsight(id));
   };
@@ -42,106 +51,84 @@ const App = () => {
     dispatch(updateInsight(insight));
   };
 
-  const handleAnalysisTextChange = e => setAnalysisText(e.target.value);
-  const handleAddAnalysis = () => {
-    dispatch(addAnalysis({ id: analysisText, name: 'name' }));
-    setAnalysisText('');
-  };
-  const handleRemoveAnalysis = id => {
-    dispatch(removeAnalysis(id));
-  };
-  const handleUpdateAnalysis = analysis => {
-    dispatch(updateAnalysis(analysis));
-  };
+  // useApiServiceFetchLocal custom hook
 
-  const handleHypothesisTextChange = e => setHypothesisText(e.target.value);
-  const handleAddHypothesis = () => {
-    dispatch(addHypothesis({ id: hypothesisText, name: 'name' }));
-    setHypothesisText('');
-  };
-  const handleRemoveHypothesis = id => {
-    dispatch(removeHypothesis(id));
-  };
-  const handleUpdateHypothesis = hypothesis => {
-    dispatch(updateHypothesis(hypothesis));
-  };
+  // options are fetched and made available to the host component.
+  // useApiServiceFetchLocal allows generic loading and error states
+  // and returns the fetched data.
+
+  // Data is fetched on first mount of the component.
+  // Refetch can be triggered by updating the refetchInsightsTrigger value
+  const [refetchOptionsTrigger, setRefetchOptionsTrigger] = useState(1);
+  const {
+    isLoading: optionsAreLoading,
+    hasError: optionsHasError,
+    data: options
+  } = useApiServiceFetchLocal(getOptions, [], refetchOptionsTrigger);
+
+  const handleRefetchOptions = () =>
+    setRefetchOptionsTrigger(refetchOptionsTrigger + 1);
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-around'
+      }}
+    >
       <div>
-        <button onClick={handleSetProject}>Set Project</button>
-      </div>
-      <div>
-        <button onClick={handleAddInsight}>Add Insight</button>
-        <input onChange={handleInsightTextChange} value={insightText} />
-      </div>
-      <div>
-        <button onClick={handleAddAnalysis}>Add Analysis</button>
-        <input onChange={handleAnalysisTextChange} value={analysisText} />
-      </div>
-      <div>
-        <button onClick={handleAddHypothesis}>Add Hypothesis</button>
-        <input onChange={handleHypothesisTextChange} value={hypothesisText} />
+        <h3>Insights are in Global Redux Store</h3>
+        <button
+          style={{ height: '35px', margin: '15px' }}
+          onClick={handleRefetchInsights}
+        >
+          Reload Insights
+        </button>
+        {insightsAreLoading && (
+          <h3 style={{ color: 'blue' }}>Loading Insights...</h3>
+        )}
+        {insightsHasError && (
+          <h3 style={{ color: 'red' }}>Error Loading Insights</h3>
+        )}
+        {insights.map(insight => (
+          <div>
+            {insight.id} --- {insight.name}
+            <button onClick={() => handleRemoveInsight(insight.id)}>
+              Remove
+            </button>
+            <button
+              onClick={() =>
+                handleUpdateInsight({
+                  id: insight.id,
+                  name: 'new-name'
+                })
+              }
+            >
+              Update
+            </button>
+          </div>
+        ))}
       </div>
 
-      <hr />
-      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-        <div>
-          {insights.map(insight => (
-            <div>
-              {insight.id} --- {insight.name}
-              <button onClick={() => handleRemoveInsight(insight.id)}>
-                Remove
-              </button>
-              <button
-                onClick={() =>
-                  handleUpdateInsight({ id: insight.id, name: 'new-name' })
-                }
-              >
-                Update
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div>
-          {analyses.map(analysis => (
-            <div>
-              {analysis.id} --- {analysis.name}
-              <button onClick={() => handleRemoveAnalysis(analysis.id)}>
-                Remove
-              </button>
-              <button
-                onClick={() =>
-                  handleUpdateAnalysis({ id: analysis.id, name: 'new-name' })
-                }
-              >
-                Update
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div>
-          {hypotheses.map(hypothesis => (
-            <div>
-              {hypothesis.id} --- {hypothesis.name}
-              <button onClick={() => handleRemoveHypothesis(hypothesis.id)}>
-                Remove
-              </button>
-              <button
-                onClick={() =>
-                  handleUpdateHypothesis({
-                    id: hypothesis.id,
-                    name: 'new-name'
-                  })
-                }
-              >
-                Update
-              </button>
-            </div>
-          ))}
-        </div>
+      <div>
+        <h3>Options are Fetched and Returned Locally</h3>
+        <button
+          style={{ height: '35px', margin: '15px' }}
+          onClick={handleRefetchOptions}
+        >
+          Reload Options
+        </button>
+        {optionsAreLoading && (
+          <h3 style={{ color: 'blue' }}>Loading Options...</h3>
+        )}
+        {optionsHasError && (
+          <h3 style={{ color: 'red' }}>Error Loading Options</h3>
+        )}
+        {options.map(option => (
+          <div>
+            {option.label} --- {option.value}
+          </div>
+        ))}
       </div>
     </div>
   );
