@@ -1,25 +1,19 @@
 import { useEffect, useReducer } from 'react';
+import { createSlice } from '@reduxjs/toolkit';
 
-const apiCallReducer = (state, action) => {
-  switch (action.type) {
-    case 'CALL_BEGAN':
-      return { ...state, isProcessing: true, hasError: false };
-
-    case 'CALL_SUCCEEDED':
-      return {
-        ...state,
-        isProcessing: false,
-        hasError: false,
-        data: action.payload
-      };
-
-    case 'CALL_FAILED':
-      return { ...state, isProcessing: false, hasError: true };
-
-    default:
-      return state;
+const apiCallSlice = createSlice({
+  name: 'apiCall',
+  reducers: {
+    callBegan: state => ({ ...state, isProcessing: true, hasError: false }),
+    callSuccess: (state, action) => ({
+      ...state,
+      isProcessing: false,
+      hasError: false,
+      data: action.payload
+    }),
+    callFailed: state => ({ ...state, isProcessing: false, hasError: true })
   }
-};
+});
 
 const useApiServiceCallLocal = (
   apiServiceCall,
@@ -31,7 +25,8 @@ const useApiServiceCallLocal = (
     hasError: false,
     data: initialData
   };
-  const [state, dispatch] = useReducer(apiCallReducer, initialState);
+  const [state, dispatch] = useReducer(apiCallSlice.reducer, initialState);
+  const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
   useEffect(() => {
     let hostIsMounted = true;
@@ -43,13 +38,14 @@ const useApiServiceCallLocal = (
     };
 
     const processApiCall = async () => {
-      dispatch({ type: 'CALL_BEGAN' });
+      dispatch(callBegan());
 
       try {
         const result = await apiServiceCall();
-        dispatchIfMounted({ type: 'CALL_SUCCEEDED', payload: result });
+
+        dispatchIfMounted(callSuccess(result));
       } catch (error) {
-        dispatchIfMounted({ type: 'CALL_FAILED' });
+        dispatchIfMounted(callFailed());
       }
     };
 
@@ -58,7 +54,7 @@ const useApiServiceCallLocal = (
     return () => {
       hostIsMounted = false;
     };
-  }, [apiServiceCall, processTrigger]);
+  }, [apiServiceCall, callFailed, callSuccess, callBegan]);
 
   return state;
 };

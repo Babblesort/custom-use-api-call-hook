@@ -1,21 +1,15 @@
 import { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
+import { createSlice } from '@reduxjs/toolkit';
 
-const apiCallReducer = (state, action) => {
-  switch (action.type) {
-    case 'CALL_BEGAN':
-      return { ...state, isProcessing: true, hasError: false };
-
-    case 'CALL_SUCCEEDED':
-      return { ...state, isProcessing: false, hasError: false };
-
-    case 'CALL_FAILED':
-      return { ...state, isProcessing: false, hasError: true };
-
-    default:
-      return state;
+const apiCallSlice = createSlice({
+  name: 'apiCall',
+  reducers: {
+    callBegan: state => ({ ...state, isProcessing: true, hasError: false }),
+    callSuccess: state => ({ ...state, isProcessing: false, hasError: false }),
+    callFailed: state => ({ ...state, isProcessing: false, hasError: true })
   }
-};
+});
 
 const useApiServiceCallRedux = (
   apiServiceCall,
@@ -25,7 +19,8 @@ const useApiServiceCallRedux = (
 ) => {
   const globalDispatch = useDispatch();
   const initialState = { isProcessing: false, hasError: false };
-  const [state, localDispatch] = useReducer(apiCallReducer, initialState);
+  const [state, localDispatch] = useReducer(apiCallSlice.reducer, initialState);
+  const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
   useEffect(() => {
     let hostIsMounted = true;
@@ -37,17 +32,17 @@ const useApiServiceCallRedux = (
     };
 
     const processApiCall = async () => {
-      localDispatch({ type: 'CALL_BEGAN' });
+      localDispatch(callBegan());
 
       try {
         const result = await apiServiceCall();
 
-        dispatchIfMounted({ type: 'CALL_SUCCEEDED' });
+        dispatchIfMounted(callSuccess());
         if (onSuccessActionCreator) {
           globalDispatch(onSuccessActionCreator(result));
         }
       } catch (error) {
-        dispatchIfMounted({ type: 'CALL_FAILED' });
+        dispatchIfMounted(callFailed);
         if (onErrorActionCreator) {
           globalDispatch(onErrorActionCreator(error));
         }
@@ -64,7 +59,10 @@ const useApiServiceCallRedux = (
     onSuccessActionCreator,
     onErrorActionCreator,
     processTrigger,
-    globalDispatch
+    globalDispatch,
+    callBegan,
+    callSuccess,
+    callFailed
   ]);
 
   return state;
