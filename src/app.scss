@@ -1,0 +1,39 @@
+.hook-demo-btn {
+  height: 35px;
+  width: 125px;
+  margin: 15px 15px 15px 0;
+}
+
+.info {
+  color: blue;
+}
+
+.error {
+  color: red;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+}
+
+.demo-content {
+  width: 960px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+}
+
+.item {
+  width: 150px;
+  display: inline-block;
+}
+
+.item-btn {
+  width: 75px;
+  margin-right: 5px;
+}
