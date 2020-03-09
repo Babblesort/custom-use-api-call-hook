@@ -10,6 +10,7 @@ const apiCallSlice = createSlice({
     callFailed: state => ({ ...state, isProcessing: false, hasError: true })
   }
 });
+const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
 const useApiServiceCallRedux = (
   apiServiceCall,
@@ -23,7 +24,6 @@ const useApiServiceCallRedux = (
     apiCallSlice.reducer,
     initialState
   );
-  const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
   useEffect(() => {
     let hostIsMounted = true;
@@ -50,10 +50,7 @@ const useApiServiceCallRedux = (
     onSuccessActionCreator,
     onErrorActionCreator,
     processTrigger,
-    globalDispatch,
-    callBegan,
-    callSuccess,
-    callFailed
+    globalDispatch
   ]);
 
   return apiCallState;
