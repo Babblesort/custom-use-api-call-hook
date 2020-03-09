@@ -25,7 +25,10 @@ const useApiServiceCallLocal = (
     hasError: false,
     data: initialData
   };
-  const [state, dispatch] = useReducer(apiCallSlice.reducer, initialState);
+  const [apiCallState, dispatch] = useReducer(
+    apiCallSlice.reducer,
+    initialState
+  );
   const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
   useEffect(() => {
@@ -47,7 +50,7 @@ const useApiServiceCallLocal = (
     return () => (hostIsMounted = false);
   }, [apiServiceCall, processTrigger, callFailed, callSuccess, callBegan]);
 
-  return state;
+  return apiCallState;
 };
 
 export default useApiServiceCallLocal;

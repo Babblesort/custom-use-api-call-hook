@@ -19,7 +19,10 @@ const useApiServiceCallRedux = (
 ) => {
   const globalDispatch = useDispatch();
   const initialState = { isProcessing: false, hasError: false };
-  const [state, localDispatch] = useReducer(apiCallSlice.reducer, initialState);
+  const [apiCallState, localDispatch] = useReducer(
+    apiCallSlice.reducer,
+    initialState
+  );
   const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
   useEffect(() => {
@@ -53,7 +56,7 @@ const useApiServiceCallRedux = (
     callFailed
   ]);
 
-  return state;
+  return apiCallState;
 };
 
 export default useApiServiceCallRedux;
