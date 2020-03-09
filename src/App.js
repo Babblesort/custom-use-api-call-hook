@@ -63,65 +63,68 @@ const App = () => {
   const handleRefetchOptions = () => setOptionsTrigger(optionsTrigger + 1);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-around'
-      }}
-    >
-      <div>
-        <h3>Insights are in Global Redux Store</h3>
-        <button
-          style={{ height: '35px', margin: '15px' }}
-          onClick={handleRefetchInsights}
-        >
-          Reload Insights
-        </button>
-        {insightsAreLoading && (
-          <h3 style={{ color: 'blue' }}>Loading Insights...</h3>
-        )}
-        {insightsHasError && (
-          <h3 style={{ color: 'red' }}>Error Loading Insights</h3>
-        )}
-        {insights.map(insight => (
-          <div>
-            {insight.id} --- {insight.name}
-            <button onClick={() => handleRemoveInsight(insight.id)}>
-              Remove
-            </button>
-            <button
-              onClick={() =>
-                handleUpdateInsight({
-                  id: insight.id,
-                  name: 'new-name'
-                })
-              }
-            >
-              Update
-            </button>
-          </div>
-        ))}
-      </div>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div
+        style={{
+          width: '1000px',
+          display: 'flex',
+          justifyContent: 'space-around'
+        }}
+      >
+        <div>
+          <h3>Insights are in Global Redux Store</h3>
+          <button
+            style={{ height: '35px', margin: '15px' }}
+            onClick={handleRefetchInsights}
+          >
+            Reload Insights
+          </button>
+          {insightsAreLoading && (
+            <h3 style={{ color: 'blue' }}>Loading Insights...</h3>
+          )}
+          {insightsHasError && (
+            <h3 style={{ color: 'red' }}>Error Loading Insights</h3>
+          )}
+          {insights.map(insight => (
+            <div>
+              {insight.id} --- {insight.name}
+              <button onClick={() => handleRemoveInsight(insight.id)}>
+                Remove
+              </button>
+              <button
+                onClick={() =>
+                  handleUpdateInsight({
+                    id: insight.id,
+                    name: 'new-name'
+                  })
+                }
+              >
+                Update
+              </button>
+            </div>
+          ))}
+        </div>
 
-      <div>
-        <h3>Options are Fetched and Returned Locally</h3>
-        <button
-          style={{ height: '35px', margin: '15px' }}
-          onClick={handleRefetchOptions}
-        >
-          Reload Options
-        </button>
-        {optionsAreLoading && (
-          <h3 style={{ color: 'blue' }}>Loading Options...</h3>
-        )}
-        {optionsHasError && (
-          <h3 style={{ color: 'red' }}>Error Loading Options</h3>
-        )}
-        {options.map(option => (
-          <div>
-            {option.label} --- {option.value}
-          </div>
-        ))}
+        <div>
+          <h3>Options are Fetched and Returned Locally</h3>
+          <button
+            style={{ height: '35px', margin: '15px' }}
+            onClick={handleRefetchOptions}
+          >
+            Reload Options
+          </button>
+          {optionsAreLoading && (
+            <h3 style={{ color: 'blue' }}>Loading Options...</h3>
+          )}
+          {optionsHasError && (
+            <h3 style={{ color: 'red' }}>Error Loading Options</h3>
+          )}
+          {options.map(option => (
+            <div>
+              {option.label} --- {option.value}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
