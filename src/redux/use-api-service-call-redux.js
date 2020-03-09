@@ -24,36 +24,24 @@ const useApiServiceCallRedux = (
 
   useEffect(() => {
     let hostIsMounted = true;
-
-    const dispatchIfMounted = action => {
-      if (hostIsMounted) {
-        localDispatch(action);
-      }
-    };
+    const safeDispatch = action => hostIsMounted && localDispatch(action);
 
     const processApiCall = async () => {
       localDispatch(callBegan());
-
       try {
         const result = await apiServiceCall();
-
-        dispatchIfMounted(callSuccess());
-        if (onSuccessActionCreator) {
+        safeDispatch(callSuccess());
+        onSuccessActionCreator &&
           globalDispatch(onSuccessActionCreator(result));
-        }
       } catch (error) {
-        dispatchIfMounted(callFailed);
-        if (onErrorActionCreator) {
-          globalDispatch(onErrorActionCreator(error));
-        }
+        safeDispatch(callFailed);
+        onErrorActionCreator && globalDispatch(onErrorActionCreator(error));
       }
     };
 
     processApiCall();
 
-    return () => {
-      hostIsMounted = false;
-    };
+    return () => (hostIsMounted = false);
   }, [
     apiServiceCall,
     onSuccessActionCreator,

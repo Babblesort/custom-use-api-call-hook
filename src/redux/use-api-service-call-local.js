@@ -30,31 +30,22 @@ const useApiServiceCallLocal = (
 
   useEffect(() => {
     let hostIsMounted = true;
-
-    const dispatchIfMounted = action => {
-      if (hostIsMounted) {
-        dispatch(action);
-      }
-    };
+    const safeDispatch = action => hostIsMounted && dispatch(action);
 
     const processApiCall = async () => {
       dispatch(callBegan());
-
       try {
         const result = await apiServiceCall();
-
-        dispatchIfMounted(callSuccess(result));
+        safeDispatch(callSuccess(result));
       } catch (error) {
-        dispatchIfMounted(callFailed());
+        safeDispatch(callFailed());
       }
     };
 
     processApiCall();
 
-    return () => {
-      hostIsMounted = false;
-    };
-  }, [apiServiceCall, callFailed, callSuccess, callBegan]);
+    return () => (hostIsMounted = false);
+  }, [apiServiceCall, processTrigger, callFailed, callSuccess, callBegan]);
 
   return state;
 };
