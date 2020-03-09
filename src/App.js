@@ -74,7 +74,7 @@ const App = () => {
         <div>
           <h3>Insights are in Global Redux Store</h3>
           <button
-            style={{ height: '35px', margin: '15px' }}
+            style={{ height: '35px', margin: '15px 0' }}
             onClick={handleRefetchInsights}
           >
             Reload Insights
@@ -87,16 +87,18 @@ const App = () => {
           )}
           {insights.map(insight => (
             <div>
-              {insight.id} --- {insight.name}
-              <button onClick={() => handleRemoveInsight(insight.id)}>
+              <span style={{ width: '150px', display: 'inline-block' }}>
+                {insight.id} - {insight.name}
+              </span>
+              <button
+                style={{ marginRight: '5px' }}
+                onClick={() => handleRemoveInsight(insight.id)}
+              >
                 Remove
               </button>
               <button
                 onClick={() =>
-                  handleUpdateInsight({
-                    id: insight.id,
-                    name: 'new-name'
-                  })
+                  handleUpdateInsight({ ...insight, name: 'new-name' })
                 }
               >
                 Update
@@ -108,7 +110,7 @@ const App = () => {
         <div>
           <h3>Options are Fetched and Returned Locally</h3>
           <button
-            style={{ height: '35px', margin: '15px' }}
+            style={{ height: '35px', margin: '15px 0' }}
             onClick={handleRefetchOptions}
           >
             Reload Options
@@ -121,7 +123,7 @@ const App = () => {
           )}
           {options.map(option => (
             <div>
-              {option.label} --- {option.value}
+              {option.value} - {option.label}
             </div>
           ))}
         </div>
