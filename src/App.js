@@ -63,7 +63,7 @@ const App = () => {
     <div className="main-content">
       <div className="demo-content">
         <div>
-          <h2 className="info">useApiServiceCallRedux</h2>
+          <h2 className="info">useApiFetchEffectRedux</h2>
           <h3>Insights are in Global Redux Store</h3>
           <div className="group-header">
             <button
@@ -113,7 +113,7 @@ const App = () => {
         </div>
 
         <div>
-          <h2 className="info">useApiServiceCallLocal</h2>
+          <h2 className="info">useApiFetchEffectLocal</h2>
           <h3>Options are Fetched and Returned Locally</h3>
           <div className="group-header">
             <button className="hook-demo-btn" onClick={fetchOptions}>
