@@ -1,27 +1,22 @@
 import { useEffect, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
-import { createSlice } from '@reduxjs/toolkit';
+import genericApiCallReducer from './generic-api-call-slice';
+import {
+  initialState,
+  callBegan,
+  callSuccess,
+  callFailed
+} from './generic-api-call-slice';
 
-const apiCallSlice = createSlice({
-  name: 'apiCall',
-  reducers: {
-    callBegan: state => ({ ...state, isProcessing: true, hasError: false }),
-    callSuccess: state => ({ ...state, isProcessing: false, hasError: false }),
-    callFailed: state => ({ ...state, isProcessing: false, hasError: true })
-  }
-});
-const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
-
-const useApiServiceCallRedux = (
+const useApiFetchEffectRedux = (
   apiServiceCall,
   onSuccessActionCreator,
   onErrorActionCreator,
   processTrigger
 ) => {
   const globalDispatch = useDispatch();
-  const initialState = { isProcessing: false, hasError: false };
   const [apiCallState, localDispatch] = useReducer(
-    apiCallSlice.reducer,
+    genericApiCallReducer,
     initialState
   );
 
@@ -56,4 +51,4 @@ const useApiServiceCallRedux = (
   return apiCallState;
 };
 
-export default useApiServiceCallRedux;
+export default useApiFetchEffectRedux;

@@ -9,6 +9,16 @@ export const getInsights = async () => {
   ];
 };
 
+let idCurrent = 4;
+export const postInsight = async () => {
+  await delay(750);
+  return `i${idCurrent++}`;
+};
+
+export const deleteInsight = async id => {
+  await delay(750);
+};
+
 export const getOptions = async () => {
   await delay(750);
   return [

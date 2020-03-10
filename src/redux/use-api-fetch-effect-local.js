@@ -16,7 +16,7 @@ const apiCallSlice = createSlice({
 });
 const { callBegan, callSuccess, callFailed } = apiCallSlice.actions;
 
-const useApiServiceCallLocal = (
+const useApiFetchEffectLocal = (
   apiServiceCall,
   initialData,
   processTrigger
@@ -53,4 +53,4 @@ const useApiServiceCallLocal = (
   return apiCallState;
 };
 
-export default useApiServiceCallLocal;
+export default useApiFetchEffectLocal;
