@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   setInsights,
   removeInsight,
-  updateInsight,
   addInsight
 } from './features/insights/insights-slice';
 import {
@@ -19,13 +18,11 @@ import useApiFetchEffectLocal from './redux/use-api-fetch-effect-local';
 import './app.scss';
 
 const App = () => {
-  const dispatch = useDispatch();
-
   // useApiFetchEffectRedux
   const insights = useSelector(state => state.insights);
   const [insightsTrigger, setInsightsTrigger] = useState(1);
   const fetchInsights = () => setInsightsTrigger(insightsTrigger + 1);
-  const handleUpdateInsight = insight => dispatch(updateInsight(insight));
+
   const {
     isProcessing: insightsAreLoading,
     hasError: insightsHasError
@@ -105,17 +102,6 @@ const App = () => {
                 <span className="item">
                   {insight.id} - {insight.name}
                 </span>
-                <button
-                  className="item-btn"
-                  onClick={() =>
-                    handleUpdateInsight({
-                      ...insight,
-                      name: 'new-name'
-                    })
-                  }
-                >
-                  Update
-                </button>
                 <button
                   className="item-btn"
                   onClick={() => handleRemoveInsight(insight.id)}
