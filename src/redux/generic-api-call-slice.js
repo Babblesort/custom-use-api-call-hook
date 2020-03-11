@@ -3,9 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const genericApiCallSlice = createSlice({
   name: 'apiCall',
   reducers: {
-    callBegan: state => ({ isProcessing: true, hasError: false }),
-    callSuccess: state => ({ isProcessing: false, hasError: false }),
-    callFailed: state => ({ isProcessing: false, hasError: true })
+    callBegan: () => ({ isProcessing: true, hasError: false }),
+    callSuccess: () => ({ isProcessing: false, hasError: false }),
+    callFailed: () => ({ isProcessing: false, hasError: true })
   }
 });
 
